@@ -1,188 +1,198 @@
+// variable declarations
 
-let timeRemaining = document.querySelector('#timeRemaining');
-let startQuiz = document.querySelector('.start-button');
-let gameStartPage = document.querySelector('#start-game');
-let response = document.querySelector('#response');
-let question1 = document.querySelector('#question1');
-let question2 = document.querySelector('#question2');
-let question3 = document.querySelector('#question3');
+let timeLeft = document.querySelector('#time-left');
+let gameStart = document.querySelector('#start-button');
+let quizQuestions = document.querySelector('#quiz-questions');
+let contentCard = document.querySelector('#content-card');
 
 
+// array object to store questions and answers
+var questions = [
+    {
+        question: "The condition in an if / else statement is enclosed within ____?",
+        choices: ["curly brackets", "parenthesis", "square brackets", "quotes"],
+        answer: "parenthesis"
+    },
+    {
+        question: "A very useful tool for use during debugging to print content to the debugger is ____?",
+        choices: ["JavaScript", "if / else", "for loops", "console.log"],
+        answer: "console.log"
+    },
+    {
+        question: "String Values must be enclosed within ____ when being assigned",
+        choices: ["curly brackets", "quotes", "square brackets", "commas"],
+        answer: "quotes"
+    },
+    {
+        question: "Arrays in JavaScript can be used to store _____?",
+        choices: ["other arrays", "numbers", "strings", "all of the above"],
+        answer: "all of the above"
+    },
+    {
+        question: "Commonly used data types do not include _____?",
+        choices: ["strings", "alerts", "numbers", "booleans"],
+        answer: "alerts"
+    },
+];
 
-let btn1 = document.querySelector('.ans1');
-let btn2 = document.querySelector('.ans2');
-let btn3 = document.querySelector('.ans3');
-let btn4 = document.querySelector('.ans4');
-let btn5 = document.querySelector('.ans5');
-let btn6 = document.querySelector('.ans6');
-let btn7 = document.querySelector('.ans7');
-let btn8 = document.querySelector('.ans8');
-let btn9 = document.querySelector('.ans9');
-let endGame = document.querySelector('#game-over');
+var questionObject = 0;
 
+var timeRemaining = 0;
 
-let secondsRemaining = 0;
-let timerInterval;
+var timeInterval = 0;
 
+var numCorrect = 0;
 
-timeRemaining.value = secondsRemaining;
-timeRemaining.textContent = secondsRemaining;
+var penalty = 10;
 
-startQuiz.addEventListener('click', startGame);
+var newUl = document.createElement("ul");
 
+timeLeft.textContent = "Time: " + timeRemaining;
 
+gameStart.addEventListener("click", function(){
 
-function end() {
-    clearInterval(timerInterval);
-    question1.style.display = "none";
-    question2.style.display = "none";
-    question3.style.display = "none";
-    endGame.style.display = "block";
+    timeRemaining = 60;
+    timeLeft.textContent = "Time: " + timeRemaining;
+
+    if(timeInterval === 0) {
+        timeInterval = setInterval(function() {
+            timeRemaining--;
+            timeLeft.textContent = "Time: " + timeRemaining;
+
+            if (timeRemaining <= 0) {
+                clearInterval(timeInterval);
+                endQuiz();
+                timeLeft.textContent = "Game Over!";
+            }
+        }, 1000);
+    }
+    displayQuestions(questionObject);
+})
+
+function displayQuestions(questionObject) {
+    contentCard.innerHTML = "";
+    newUl.innerHTML = "";
+
+    //loop through the array
+    for (var i = 0; i < questions.length; i++) {
+        var userQuestion = questions[questionObject].question;
+        var userChoices = questions[questionObject].choices;
+        contentCard.textContent = userQuestion;
+    }
+
+    userChoices.forEach(function (newItem) {
+        var listEl = document.createElement("li");
+        listEl.textContent = newItem;
+        contentCard.appendChild(newUl);
+        newUl.appendChild(listEl);
+        listEl.addEventListener("click", (checkAnswer));
+    })
 
 }
 
-function startGame() {
-    secondsRemaining = 30;
-    timeRemaining.value = secondsRemaining;
-    timeRemaining.textContent = secondsRemaining;
+function checkAnswer(event) {
+    var eventItem = event.target;
 
-    timerInterval = setInterval(timerDown, 1000);
+    if (eventItem.matches("li")) {
+        var newDivEl = document.createElement("div");
+        newDivEl.setAttribute("id", "newDivEl");
 
-function timerDown() {
-    secondsRemaining--;
-    timeRemaining.textContent = secondsRemaining;
-
-    if (secondsRemaining <= 0) {
-        end();
+        if (eventItem.textContent == questions[questionObject].answer) {
+            numCorrect++;
+            newDivEl.textContent = "Correct!";
+        } else {
+            timeRemaining -= penalty;
+            newDivEl.textContent = "Wrong!"; 
+        }
     }
 
+    questionObject++;
+
+    if (questionObject >= questions.length) {
+        endQuiz();
+        newDivEl.textContent = "Game Over! You got: " + numCorrect + "/" + questions.length + " right!";
+    } else {
+        displayQuestions(questionObject);
+    }
+    contentCard.appendChild(newDivEl);
 }
 
-    gameStartPage.style.display = "none";
+function endQuiz() {
+    contentCard.innerHTML = "";
+    timeLeft.innerHTML = " ";
 
-    if (secondsRemaining <= 0) {
-        endGame.style.display = 'initial';
-    }   else
-        question1.style.display = "initial";
+    var newHeadEl = document.createElement("h1");
+    newHeadEl.setAttribute("id", "newHeadEl");
+    newHeadEl.textContent = "Game Over!";
 
-        btn1.addEventListener('click', answerWrong);
-        btn2.addEventListener('click', answerWrong);
-        btn3.addEventListener('click', answerCorrect);
+    contentCard.appendChild(newHeadEl);
 
-        
+    var newPara = document.createElement("p");
+    newPara.setAttribute("id", "newPara");
 
+    contentCard.appendChild(newPara);
 
+    if (timeRemaining >= 0) {
+        var timeScore = timeRemaining;
+        var newPara2 = document.createElement("p");
+        clearInterval(timeInterval);
+        newPara.textContent = "Your final score is: " + timeScore;
 
-function answerCorrect() {
-    response.textContent = "Correct!";
-    question1.style.display = "none";
-    question2.style.display = "initial";
-
-    btn1.addEventListener('click', answerWrong2);
-    btn2.addEventListener('click', answerCorrect2);
-    btn3.addEventListener('click', answerWrong2);
-
-    function answerCorrect2() {
-        response.textContent = "Correct!";
-        question2.style.display = "none";
-        question3.style.display = "initial";
-    
-        btn1.addEventListener('click', answerCorrect3);
-        btn2.addEventListener('click', answerWrong3);
-        btn3.addEventListener('click', answerWrong3);
-
-        function answerCorrect3() {
-            end();
-        }
-
-        function answerWrong3() {
-            end();
-        }
+        contentCard.appendChild(newPara2);
     }
 
-    function answerWrong2 () {
-        response.textContent = "Wrong!";
-        secondsRemaining -= 10;
-        timeRemaining.textContent = secondsRemaining;
+    // get user initials for the highscore page
 
+    var newLabelEl = document.createElement("label");
+    newLabelEl.setAttribute("id", "newLabelEl");
+    newLabelEl.textContent = "Enter your initials: ";
 
-        question2.style.display = "none";
-        question3.style.display = "initial";
-    
-        btn1.addEventListener('click', answerCorrect3);
-        btn2.addEventListener('click', answerWrong3);
-        btn3.addEventListener('click', answerWrong3);
+    contentCard.appendChild(newLabelEl);
 
-        function answerCorrect3() {
-            end();
+    // get user input
+
+var newInputEl = document.createElement("input");
+    newInputEl.setAttribute("type", "text");
+    newInputEl.setAttribute("id", "initials");
+    newInputEl.textContent = "";
+
+    contentCard.appendChild(newInputEl);
+
+    // new submit button 
+    var newSubmitEl = document.createElement("button");
+    newSubmitEl.setAttribute("type", "submit");
+    newSubmitEl.setAttribute("id", "submit");
+    newSubmitEl.textContent = "Submit";
+
+    contentCard.appendChild(newSubmitEl);
+
+    //event listener to store initials in local storage
+    newSubmitEl.addEventListener("click", function() {
+        var initials = newInputEl.value;
+
+        if (initials === null) {
+            console.log("No Initials entered");
+        } else {
+            var finalScore = {
+                initials: initials,
+                score: timeScore
+            }
+            console.log(finalScore);
+            var totalScores = localStorage.getItem("totalScores");
+
+            if (totalScores === null) {
+                totalScores = [];
+            } else {
+                totalScores = JSON.parse(totalScores);
+            }
+            totalScores.push(finalScore);
+            var highScore = JSON.stringify(totalScores);
+            localStorage.setItem("totalScores", highScore);
+
+            // goes to the highscores page
+            window.location.replace("highscore.html");
         }
-
-        function answerWrong3() {
-            end();
-        }
-    }
-
-
-
-    
-}
-
-function answerWrong() {
-    response.textContent = "Wrong!";
-    secondsRemaining -= 10;
-    timeRemaining.textContent = secondsRemaining;
-
-    response.textContent = "wrong!";
-    question1.style.display = "none";
-    question2.style.display = "initial";
-
-    btn1.addEventListener('click', answerWrong2);
-    btn2.addEventListener('click', answerCorrect2);
-    btn3.addEventListener('click', answerWrong2);
-
-    function answerCorrect2() {
-        response.textContent = "Correct!";
-        question2.style.display = "none";
-        question3.style.display = "initial";
-    
-        btn1.addEventListener('click', answerCorrect3);
-        btn2.addEventListener('click', answerWrong3);
-        btn3.addEventListener('click', answerWrong3);
-
-        function answerCorrect3() {
-            end();
-        }
-
-        function answerWrong3() {
-            end();
-        }
-    }
-
-    function answerWrong2 () {
-        response.textContent = "Wrong!";
-        secondsRemaining -= 10;
-        timeRemaining.textContent = secondsRemaining;
-
-        
-        question2.style.display = "none";
-        question3.style.display = "initial";
-    
-        btn1.addEventListener('click', answerCorrect3);
-        btn2.addEventListener('click', answerWrong3);
-        btn3.addEventListener('click', answerWrong3);
-
-        function answerCorrect3() {
-            end();
-        }
-
-        function answerWrong3() {
-            end();
-        }
-    }
-}
-
-
-    
+    });
 }
 
 

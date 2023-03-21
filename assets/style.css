@@ -1,3 +1,105 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
 
+.navBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: navy;
+    color: white;
+    height: 50px;
+    align-items: center;
+}
+
+.navBar span {
+    padding-right: 50px;
+}
+
+.navBar a {
+    color: white;
+    text-decoration: none;
+    padding-left: 20px;
+}
+
+#content-card {
+    display: flex;
+    flex-direction: column;
+    border: 5px solid navy;
+    margin: 20px auto;
+    height: auto;
+    width: 50%;
+    padding: 20px;
+    text-align: center;
+    
+
+}
+
+#content-card h2  {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#start-para {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#start-button {
+    color: white;
+    background-color: navy;
+    margin: auto;
+}
+
+#new-content-card {
+    display: flex;
+    flex-direction: column;
+    border: 5px solid navy;
+    margin: 20px auto;
+    height: auto;
+    width: 50%;
+    padding: 20px;
+    text-align: center;
+}
+
+#go-back,
+#clear {
+    background-color: navy;
+    color: white;
+    width:  100px;
+    margin: 20px auto;
+
+}
+
+
+
+li {
+    list-style-type: none;
+    background-color: navy;
+    margin-top: 20px;
+    padding: 10px;
+    width: 50%;
+    font-size: 20px;
+    color: white;
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#initials {
+    width: 15%;
+    margin:  20px auto;
+}
+
+#submit {
+    width: 15%;
+    margin:  20px auto;
+    background-color: navy;
+    color: white;
+}
 
 
